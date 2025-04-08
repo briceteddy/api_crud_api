@@ -1,9 +1,9 @@
 <?php
 class Database {
-    private $host = "localhost";
-    private $db_name = "bd";
-    private $username = "root";
-    private $password = "2025";
+    private $host = "db"; 
+    private $db_name = "crud_db";
+    private $username = "user"; 
+    private $password = "pass"; 
     public $conn;
 
     public function connect() {
