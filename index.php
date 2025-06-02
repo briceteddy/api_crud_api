@@ -8,6 +8,10 @@ $resource = $uri[1] ?? null;
 $id = $uri[2] ?? null;
 
 switch ($resource) {
+    case 'health':
+        require './views/health.php';
+        break;
+
     case 'tasks':
         if ($method === 'GET' && $id) {
             require './views/read.php'; // Get one task
