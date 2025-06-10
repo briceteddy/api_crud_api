@@ -11,43 +11,50 @@ class Task {
         $this->conn = $db;
     }
 
-    public function read() {
-        $query = "SELECT * FROM " . $this->table . " ORDER BY created_at DESC";
-        $stmt = $this->conn->prepare($query);
-        $stmt->execute();
-        return $stmt;
-    }
-
     public function create() {
         $query = "INSERT INTO " . $this->table . " SET title = :title";
         $stmt = $this->conn->prepare($query);
-
+    
         $this->title = htmlspecialchars(strip_tags($this->title));
         $stmt->bindParam(":title", $this->title);
-
+    
         return $stmt->execute();
     }
 
-    public function update() {
-        $query = "UPDATE " . $this->table . " SET title = :title WHERE id = :id";
-        $stmt = $this->conn->prepare($query);
+   // Get one task by ID
+   public function getOne() {
+    $query = "SELECT * FROM " . $this->table . " WHERE id = :id LIMIT 1";
+    $stmt = $this->conn->prepare($query);
 
-        $this->title = htmlspecialchars(strip_tags($this->title));
-        $this->id = htmlspecialchars(strip_tags($this->id));
+    $this->id = htmlspecialchars(strip_tags($this->id));
+    $stmt->bindParam(":id", $this->id);
 
-        $stmt->bindParam(":title", $this->title);
-        $stmt->bindParam(":id", $this->id);
+    $stmt->execute();
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+}
 
-        return $stmt->execute();
-    }
+// Update one task by ID
+public function updateOne() {
+    $query = "UPDATE " . $this->table . " SET title = :title WHERE id = :id";
+    $stmt = $this->conn->prepare($query);
 
-    public function delete() {
-        $query = "DELETE FROM " . $this->table . " WHERE id = :id";
-        $stmt = $this->conn->prepare($query);
+    $this->title = htmlspecialchars(strip_tags($this->title));
+    $this->id = htmlspecialchars(strip_tags($this->id));
 
-        $this->id = htmlspecialchars(strip_tags($this->id));
-        $stmt->bindParam(":id", $this->id);
+    $stmt->bindParam(":title", $this->title);
+    $stmt->bindParam(":id", $this->id);
 
-        return $stmt->execute();
-    }
+    return $stmt->execute();
+}
+
+// Delete one task by ID
+public function deleteOne() {
+    $query = "DELETE FROM " . $this->table . " WHERE id = :id";
+    $stmt = $this->conn->prepare($query);
+
+    $this->id = htmlspecialchars(strip_tags($this->id));
+    $stmt->bindParam(":id", $this->id);
+
+    return $stmt->execute();
+}
 }
